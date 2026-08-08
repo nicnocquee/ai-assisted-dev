@@ -59,3 +59,13 @@ install.sh       # Symlink installer
 ```bash
 ./install.sh --uninstall
 ```
+
+## Dry-run (already exercised)
+
+`demos/shop` is a nested git demo that ran the full loop once (empty cart):
+
+- Ledger: `demos/shop/tasks/`
+- Evidence + screenshots: `demos/shop/evidence/T-0001/`
+- Notes: [demos/README.md](demos/README.md)
+
+Stakeholder review credentials (demo only): `demo@shop.test` / `demo1234` @ http://localhost:3456
