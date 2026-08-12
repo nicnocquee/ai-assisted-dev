@@ -10,6 +10,20 @@ The human is a **stakeholder only**:
 - Agents install, run, seed, test, commit, and merge.
 - The human only observes, reviews evidence, and approves or rejects ships.
 
+## Agent models (per role)
+
+Each custom agent pins its own model in YAML frontmatter. Skills launch the named agent and **do not pass a model override** unless the stakeholder named one.
+
+| Agent           | Role          | Model                        | Why                                                    |
+| --------------- | ------------- | ---------------------------- | ------------------------------------------------------ |
+| `flow-builder`  | Implement     | `composer-2.5[fast=false]`   | Coding, tests, docs                                    |
+| `flow-verifier` | Evidence / QA | `composer-2.5[fast=true]`    | Seed, run app, screenshots — speed over deep reasoning |
+| `flow-reviewer` | Diff review   | `claude-opus-5[effort=high]` | Correctness, security, missing tests                   |
+
+The parent orchestrator (the chat that runs `flow-plan` / `flow-work` / `flow-evidence` / `flow-ship`) uses whatever model you picked in Cursor. Skills run there; only delegated subagents use the table above.
+
+To change a role's model, edit `model:` in `agents/<name>.md` (the install symlink picks it up). Cursor falls back if that model is blocked or not on the plan.
+
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):

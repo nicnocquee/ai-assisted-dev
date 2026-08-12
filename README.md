@@ -10,6 +10,19 @@ Personal Cursor skills and agents that let AI agents plan, build, verify, and sh
 - **Always-on documentation** under `docs/`
 - **Committed evidence packs** with seeded data, credentials, screenshots, and step-by-step human verification
 - **Stakeholder ship gate** — you review evidence, then agents merge
+- **Per-role models** — builder, verifier, and reviewer each pin their own model (see below)
+
+## Models (per role)
+
+The chat you type in uses whatever you pick in Cursor. Delegated agents do not inherit that unless you override them.
+
+| Agent           | Model                               |
+| --------------- | ----------------------------------- |
+| `flow-builder`  | `composer-2.5` (standard, not fast) |
+| `flow-verifier` | `composer-2.5` fast                 |
+| `flow-reviewer` | `claude-opus-5` high effort         |
+
+Change a pin by editing `model:` in `agents/<name>.md`.
 
 ## Install
 

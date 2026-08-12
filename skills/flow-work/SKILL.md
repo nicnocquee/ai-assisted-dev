@@ -104,7 +104,7 @@ chore(T-NNNN): start work
 
 ### 5. Build
 
-Prefer launching the **flow-builder** agent scoped to the worktree path with a prompt that includes:
+Prefer launching the **flow-builder** agent scoped to the worktree path. Do **not** pass a model unless the stakeholder named one — `flow-builder` is pinned to `composer-2.5[fast=false]` (see `reference/conventions.md` → Agent models). Include in the prompt:
 
 - Task acceptance criteria and seed requirements (for later)
 - PROJECT.md commands

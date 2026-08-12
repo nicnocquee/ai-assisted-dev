@@ -39,7 +39,7 @@ Evidence progress:
 - [ ] 8. Status → evidence-ready; hand off flow-ship
 ```
 
-Prefer delegating steps 2–6 to **flow-verifier**. Parent ensures commits and status updates.
+Prefer delegating steps 2–6 to **flow-verifier**. Do **not** pass a model unless the stakeholder named one — `flow-verifier` is pinned to `composer-2.5[fast=true]` (see `reference/conventions.md` → Agent models). Parent ensures commits and status updates.
 
 ### 1. Implementation SHA
 

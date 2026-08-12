@@ -1,6 +1,7 @@
 ---
 name: flow-builder
 description: Implements a flow task inside its git worktree with tests, docs, and regular commits. Never asks the stakeholder to run commands.
+model: composer-2.5[fast=false]
 ---
 
 # flow-builder

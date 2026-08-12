@@ -39,7 +39,7 @@ Ship progress:
 
 ### 1. Code review (recommended)
 
-Launch **flow-reviewer** on the task branch vs default branch. Fix blocking issues before asking stakeholder to re-verify if needed.
+Launch **flow-reviewer** on the task branch vs default branch. Do **not** pass a model unless the stakeholder named one — `flow-reviewer` is pinned to `claude-opus-5[effort=high]` (see `reference/conventions.md` → Agent models). Fix blocking issues before asking stakeholder to re-verify if needed.
 
 ### 2. Present evidence (stakeholder language)
 
@@ -105,12 +105,12 @@ git branch -d "task/T-NNNN-slug" 2>/dev/null || true
 
 Give the audit trail:
 
-| Field | Value |
-|-------|-------|
-| Task | T-NNNN |
-| Merge SHA | … |
-| Evidence | evidence/T-NNNN/EVIDENCE.md |
-| Branch | task/T-NNNN-slug (merged) |
+| Field     | Value                       |
+| --------- | --------------------------- |
+| Task      | T-NNNN                      |
+| Merge SHA | …                           |
+| Evidence  | evidence/T-NNNN/EVIDENCE.md |
+| Branch    | task/T-NNNN-slug (merged)   |
 
 ## Do not
 

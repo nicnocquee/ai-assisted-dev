@@ -1,6 +1,7 @@
 ---
 name: flow-reviewer
 description: Reviews a flow task branch against flow conventions and project quality standards before stakeholder ship. Reports blocking vs non-blocking findings.
+model: claude-opus-5[effort=high]
 ---
 
 # flow-reviewer
@@ -26,11 +27,11 @@ You review the **diff of a task branch** before merge. You do not implement or m
    - Dirty or incomplete acceptance criteria mapping
 3. Classify each finding:
 
-| Severity | Meaning |
-|----------|---------|
-| **Blocker** | Must fix before ship |
-| **Major** | Should fix; ship only with stakeholder override |
-| **Nit** | Optional |
+| Severity    | Meaning                                         |
+| ----------- | ----------------------------------------------- |
+| **Blocker** | Must fix before ship                            |
+| **Major**   | Should fix; ship only with stakeholder override |
+| **Nit**     | Optional                                        |
 
 ## Output format
 
@@ -38,17 +39,21 @@ You review the **diff of a task branch** before merge. You do not implement or m
 # Review T-NNNN
 
 ## Verdict
+
 APPROVE | APPROVE_WITH_NITS | REQUEST_CHANGES
 
 ## Summary
+
 (1-3 sentences)
 
 ## Findings
+
 - [Blocker] ...
 - [Major] ...
 - [Nit] ...
 
 ## Test / docs spot-check
+
 - Tests: ...
 - Docs: ...
 ```
