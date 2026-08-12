@@ -35,20 +35,20 @@ This symlinks skills into `~/.cursor/skills/` and agents into `~/.cursor/agents/
 
 ## Workflow (in any app repo)
 
-| Skill           | When                                                             |
-| --------------- | ---------------------------------------------------------------- |
-| `flow-init`     | First time on a project — writes `PROJECT.md`, scaffolds folders |
-| `flow-plan`     | You describe a feature — becomes tasks in the ledger             |
-| `flow-work`     | Agents implement a task in a worktree                            |
-| `flow-evidence` | Agents seed data, run the app, produce review evidence           |
-| `flow-ship`     | You approve → merge, close task, clean worktree                  |
-| `flow-status`   | Dashboard of all tasks / worktrees / evidence                    |
+| Skill           | When                                                                            |
+| --------------- | ------------------------------------------------------------------------------- |
+| `flow-init`     | First time on a project — writes `PROJECT.md`, scaffolds folders                |
+| `flow-plan`     | You describe a feature — agent asks until nothing is assumed, then writes tasks |
+| `flow-work`     | Agents implement a task in a worktree                                           |
+| `flow-evidence` | Agents seed data, run the app, produce review evidence                          |
+| `flow-ship`     | You approve → merge, close task, clean worktree                                 |
+| `flow-status`   | Dashboard of all tasks / worktrees / evidence                                   |
 
 ### Example
 
 > "I want users to empty their cart."
 
-1. Agent runs **flow-plan** → tasks with acceptance criteria
+1. Agent runs **flow-plan** → clarifying questions, then tasks with acceptance criteria
 2. Agent runs **flow-work** (possibly in parallel worktrees)
 3. Agent runs **flow-evidence** → seeds user + products + cart items, writes login credentials and step-by-step verification
 4. You open the app locally with the provided credentials and walk through

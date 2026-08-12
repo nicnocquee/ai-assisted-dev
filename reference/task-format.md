@@ -22,16 +22,16 @@ tasks/
 
 ## Lifecycle statuses
 
-| Status | Meaning |
-|--------|---------|
-| `planned` | Task file created; not started |
-| `in_progress` | Worktree active; building |
-| `blocked` | Waiting on dependency or external answer |
-| `ready-for-evidence` | Implementation + tests + docs done |
-| `evidence-ready` | Evidence pack committed and ready for human review |
-| `in-review` | Stakeholder reviewing evidence |
-| `done` | Merged; ledger has merge SHA |
-| `cancelled` | Abandoned; keep history |
+| Status               | Meaning                                            |
+| -------------------- | -------------------------------------------------- |
+| `planned`            | Task file created; not started                     |
+| `in_progress`        | Worktree active; building                          |
+| `blocked`            | Waiting on dependency or external answer           |
+| `ready-for-evidence` | Implementation + tests + docs done                 |
+| `evidence-ready`     | Evidence pack committed and ready for human review |
+| `in-review`          | Stakeholder reviewing evidence                     |
+| `done`               | Merged; ledger has merge SHA                       |
+| `cancelled`          | Abandoned; keep history                            |
 
 Transitions are logged in the task's Status log with ISO timestamp and commit SHA when available.
 
@@ -40,9 +40,9 @@ Transitions are logged in the task's Status log with ISO timestamp and commit SH
 ```markdown
 # Task ledger
 
-| ID | Title | Status | Branch | Worktree | Evidence | Merge SHA | Depends on |
-|----|-------|--------|--------|----------|----------|-----------|------------|
-| T-0001 | Empty cart | planned | task/T-0001-empty-cart | | | | |
+| ID     | Title      | Status  | Branch                 | Worktree | Evidence | Merge SHA | Depends on |
+| ------ | ---------- | ------- | ---------------------- | -------- | -------- | --------- | ---------- |
+| T-0001 | Empty cart | planned | task/T-0001-empty-cart |          |          |           |            |
 ```
 
 Keep this table sorted by ID ascending. Update it whenever status/branch/evidence/merge changes and **commit the update**.
@@ -53,12 +53,15 @@ Keep this table sorted by ID ascending. Update it whenever status/branch/evidenc
 # T-0001: Empty cart
 
 ## Status
+
 planned
 
 ## Summary
+
 Stakeholders can empty all items from their shopping cart in one action.
 
 ## Acceptance criteria
+
 - [ ] Logged-in user with items in cart sees an "Empty cart" control on the cart page
 - [ ] Confirming empty cart leaves the cart with zero items
 - [ ] Empty cart is safe when the cart is already empty
@@ -66,21 +69,27 @@ Stakeholders can empty all items from their shopping cart in one action.
 - [ ] Feature docs updated under docs/features/
 
 ## Stakeholder verification scenario
+
 What the human will do after evidence (high level). Detailed steps belong in EVIDENCE.md.
+
 1. Log in as seeded user
 2. Open cart and confirm pre-seeded items
 3. Empty cart and confirm zero items
 
 ## Seed requirements
+
 Data the evidence seeder must create:
+
 - User: demo@shop.test / demo1234
 - At least 3 products in catalog
 - Those products pre-added to the demo user's cart
 
 ## Engineering notes
+
 - (files expected to touch, API shape, constraints)
 
 ### TS/JS standards checklist (include when project language is TS/JS)
+
 - [ ] JSDoc on every new or modified function
 - [ ] Collaborators accepted via dependency injection with production defaults
 - [ ] Co-located unit tests (`.test.ts` / `.test.js`) targeting 100% coverage of new logic
@@ -88,27 +97,35 @@ Data the evidence seeder must create:
 - [ ] Lint and TypeScript errors resolved before ready-for-evidence
 
 ## Dependencies
+
 - none | T-0002 | ...
 
 ## Branch
+
 task/T-0001-empty-cart
 
 ## Worktree
+
 .worktrees/T-0001
 
 ## Evidence
+
 (evidence/T-0001/EVIDENCE.md once exists)
 
 ## Merge SHA
+
 (after ship)
 
 ## Status log
-| When (UTC) | Status | Note | Commit |
-|------------|--------|------|--------|
+
+| When (UTC)           | Status  | Note         | Commit  |
+| -------------------- | ------- | ------------ | ------- |
 | 2026-01-01T00:00:00Z | planned | Task created | abc1234 |
 ```
 
 ## Creating a task (flow-plan)
+
+Do not create files until `flow-plan` has finished its drill-down gate (no invented product facts).
 
 1. Assign next ID
 2. Write `tasks/T-NNNN-slug/task.md`
