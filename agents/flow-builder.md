@@ -18,6 +18,7 @@ You implement **one** flow task completely from engineering side until `ready-fo
 - Task ID + path to `task.md`
 - Worktree absolute path
 - PROJECT.md commands
+- Assigned `PORT` / `BASE_URL` when provided (use for any local smoke `dev` run; never bind shared `default_port` if other tasks are active)
 - Acceptance criteria + engineering notes
 
 ## Non-negotiable practices

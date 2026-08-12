@@ -18,17 +18,17 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 type(scope): short imperative summary
 ```
 
-| Type | Use |
-|------|-----|
-| `feat` | User-facing feature work |
-| `fix` | Bug fix |
-| `test` | Tests only |
-| `docs` | Documentation only |
-| `chore` | Tooling, config, scaffold |
-| `refactor` | No behavior change |
-| `task` | Create/update task ledger entries |
-| `evidence` | Evidence pack for a task |
-| `ship` | Merge / close bookkeeping |
+| Type       | Use                               |
+| ---------- | --------------------------------- |
+| `feat`     | User-facing feature work          |
+| `fix`      | Bug fix                           |
+| `test`     | Tests only                        |
+| `docs`     | Documentation only                |
+| `chore`    | Tooling, config, scaffold         |
+| `refactor` | No behavior change                |
+| `task`     | Create/update task ledger entries |
+| `evidence` | Evidence pack for a task          |
+| `ship`     | Merge / close bookkeeping         |
 
 Rules:
 
@@ -87,11 +87,11 @@ git worktree remove .worktrees/T-0001
 
 Every shipped task updates product docs under `docs/`:
 
-| Path | Contents |
-|------|----------|
+| Path                      | Contents                                          |
+| ------------------------- | ------------------------------------------------- |
 | `docs/features/<slug>.md` | What the feature does, who uses it, how to try it |
-| `docs/api/<slug>.md` | Endpoints / contracts if applicable |
-| `docs/adr/` | Architecture decisions when justified |
+| `docs/api/<slug>.md`      | Endpoints / contracts if applicable               |
+| `docs/adr/`               | Architecture decisions when justified             |
 
 Docs are committed as part of the task branch, not as an afterthought.
 
@@ -112,6 +112,63 @@ Before marking implementation `ready-for-evidence`:
 - Tasks with overlapping file ownership get dependencies declared in `task.md`
 - Orchestrator only starts a task when dependencies are `done`
 - Independent tasks run in parallel via separate worktrees and subagents
+
+## Dev server ports (parallel worktrees)
+
+Multiple agents must **never** all bind `PROJECT.md` `default_port`. Each task owns a dedicated port.
+
+### Assignment
+
+1. Read `default_port` from `PROJECT.md` Runtime.
+2. Parse task number `N` from `T-NNNN` (e.g. `T-0001` → `1`, `T-0012` → `12`).
+3. Candidate: `default_port + N`.
+4. If that port is already listening, scan upward until free (cap: candidate + 100).
+5. Record the chosen port + `base_url` (`http://localhost:<port>`) for evidence and handoffs.
+
+Inline picker (run from the app repo):
+
+```bash
+pick_flow_port() {
+  local default_port="$1" task_id="$2"
+  local num candidate port max
+  num=$((10#${task_id#T-}))
+  candidate=$((default_port + num))
+  max=$((candidate + 100))
+  port=$candidate
+  while lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; do
+    port=$((port + 1))
+    (( port > max )) && { echo "No free port near $candidate" >&2; return 1; }
+  done
+  echo "$port"
+}
+PORT="$(pick_flow_port 3000 T-0001)"   # use PROJECT.md default_port
+```
+
+Or resolve the flow install via the `flow-work` skill symlink:
+
+```bash
+FLOW_ROOT="$(cd "$(dirname "$(readlink -f ~/.cursor/skills/flow-work)")/.." && pwd)"
+"${FLOW_ROOT}/reference/scripts/pick-flow-port.sh" <default_port> T-NNNN
+```
+
+### Starting the app
+
+Prefer the `PORT` env var (works for Next, Vite, many Node servers):
+
+```bash
+PORT=<port> <dev command from PROJECT.md>
+```
+
+If the stack ignores `PORT`, use its explicit flag (e.g. `next dev -p <port>`) and document that in `PROJECT.md` agent notes.
+
+On `EADDRINUSE`, bump the port and retry — do not fall back to `default_port`.
+
+Always put the **actual** `base_url` in evidence and in the stakeholder handoff (never assume the PROJECT.md default).
+
+### When to assign
+
+- **flow-work**: assign when creating the worktree / launching builders; pass `PORT` + `base_url` into builder and evidence prompts.
+- **flow-evidence / flow-verifier**: re-confirm the port is free (or re-pick) before `dev`; never start two tasks on the same port.
 
 ## Forbidden
 

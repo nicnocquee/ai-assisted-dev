@@ -30,49 +30,57 @@ evidence/
 # Evidence: T-NNNN — <title>
 
 ## Status
+
 ready-for-review
 
 ## Linked commits
-| Kind | SHA | Notes |
-|------|-----|-------|
-| Implementation HEAD | <sha> | Branch task/T-NNNN-slug at evidence time |
-| Evidence pack | <sha after self-commit> | This folder |
+
+| Kind                | SHA                     | Notes                                    |
+| ------------------- | ----------------------- | ---------------------------------------- |
+| Implementation HEAD | <sha>                   | Branch task/T-NNNN-slug at evidence time |
+| Evidence pack       | <sha after self-commit> | This folder                              |
 
 ## What changed
+
 - Short bullet list of user-visible and technical changes
 - Link to docs: docs/features/<slug>.md
 
 ## Automated checks
-| Check | Command | Result |
-|-------|---------|--------|
-| test | <from PROJECT.md> | pass / fail + summary |
-| lint | ... | pass / n/a |
-| typecheck | ... | pass / n/a |
+
+| Check     | Command           | Result                |
+| --------- | ----------------- | --------------------- |
+| test      | <from PROJECT.md> | pass / fail + summary |
+| lint      | ...               | pass / n/a            |
+| typecheck | ...               | pass / n/a            |
 
 Artifacts: logs/test-output.txt (if captured)
 
 ## Local runtime setup (already done by agents if marked running)
-| Item | Value |
-|------|-------|
-| base_url | http://localhost:3000 |
-| seed command | npm run seed |
-| db-reset command | npm run db:reset |
-| agent left app running | yes / no |
-| how to start if not running | <dev command from PROJECT.md> |
+
+| Item                        | Value                                              |
+| --------------------------- | -------------------------------------------------- |
+| base_url                    | http://localhost:<actual-port>                     |
+| seed command                | npm run seed                                       |
+| db-reset command            | npm run db:reset                                   |
+| agent left app running      | yes / no                                           |
+| how to start if not running | `PORT=<actual-port> <dev command from PROJECT.md>` |
 
 ## Seeded demo data
 
 ### Credentials
+
 | Role | Username / email | Password |
-|------|------------------|----------|
-| demo | demo@shop.test | demo1234 |
+| ---- | ---------------- | -------- |
+| demo | demo@shop.test   | demo1234 |
 
 ### Fixture inventory
+
 - Products: Mug ($12), Shirt ($28), Stickers ($5)
 - Cart for demo user: all three products, qty 1 each
 - Other notes: ...
 
 ## Human verification steps
+
 1. Ensure app is running at base_url (start with `<dev>` if needed)
 2. Open base_url
 3. Log in with the credentials above
@@ -82,20 +90,24 @@ Artifacts: logs/test-output.txt (if captured)
 7. Confirm cart shows 0 items / empty state
 
 ### Expected outcomes
+
 - Step 5: three products listed with correct names/prices
 - Step 7: empty state message “Your cart is empty”
 
 ## Screenshots
-| Step | File | Description |
-|------|------|-------------|
-| 3 | screenshots/01-login.png | After login |
-| 5 | screenshots/02-cart-full.png | Cart with 3 items |
-| 7 | screenshots/03-cart-empty.png | After empty |
+
+| Step | File                          | Description       |
+| ---- | ----------------------------- | ----------------- |
+| 3    | screenshots/01-login.png      | After login       |
+| 5    | screenshots/02-cart-full.png  | Cart with 3 items |
+| 7    | screenshots/03-cart-empty.png | After empty       |
 
 ## Known risks / follow-ups
+
 - (none, or non-blocking notes)
 
 ## Verifier attestation
+
 - Verifier agent: flow-verifier
 - Environment cleaned with db-reset before seed: yes/no
 - All acceptance criteria observed: yes/no

@@ -15,7 +15,8 @@ Produce observational proof that a task works for a stakeholder without their ma
 
 - `PROJECT.md`
 - Task file + acceptance criteria + seed requirements
-- `reference/evidence-format.md`
+- Flow `reference/evidence-format.md`
+- Flow `reference/conventions.md` → **Dev server ports**
 - Agent `flow-verifier`
 
 ## Preconditions
@@ -71,12 +72,24 @@ If seed is insufficient for the scenario, extend seed scripts in this worktree, 
 
 ### 4. Run the app
 
-Start `dev`. Resolve port conflicts by choosing a free port and documenting the actual base_url in evidence.
+Assign a **task-unique port** before starting (see `reference/conventions.md` → Dev server ports). Prefer the PORT passed from flow-work; otherwise:
+
+```bash
+DEFAULT_PORT=$(awk '/default_port:/ {print $NF; exit}' PROJECT.md)
+# candidate = default_port + N from T-NNNN; scan up if busy
+PORT="$(pick_flow_port "$DEFAULT_PORT" T-NNNN)"   # or reference/scripts/pick-flow-port.sh
+BASE_URL="http://localhost:${PORT}"
+PORT="$PORT" <dev command from PROJECT.md>
+```
+
+Confirm the process is reachable at `BASE_URL`. Document that **actual** URL in evidence — never assume PROJECT.md `base_url` if the port differs.
+
+On `EADDRINUSE`, bump port and retry. Do not collide with other worktrees.
 
 Keep the process running when possible so the stakeholder can click immediately. Document:
 
 - app left running? yes/no
-- how to start if no
+- how to start if no (must include `PORT=<port>` or equivalent)
 
 ### 5. Observe the feature
 

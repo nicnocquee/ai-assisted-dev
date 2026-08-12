@@ -5,7 +5,7 @@ Personal Cursor skills and agents that let AI agents plan, build, verify, and sh
 ## What you get
 
 - **Auditable task ledger** in each app repo (`tasks/`)
-- **Parallel work** via git worktrees (one task per worktree)
+- **Parallel work** via git worktrees (one task per worktree, one dedicated `dev` port per task)
 - **Regular commits** with conventional messages
 - **Always-on documentation** under `docs/`
 - **Committed evidence packs** with seeded data, credentials, screenshots, and step-by-step human verification
@@ -22,14 +22,14 @@ This symlinks skills into `~/.cursor/skills/` and agents into `~/.cursor/agents/
 
 ## Workflow (in any app repo)
 
-| Skill | When |
-|-------|------|
-| `flow-init` | First time on a project — writes `PROJECT.md`, scaffolds folders |
-| `flow-plan` | You describe a feature — becomes tasks in the ledger |
-| `flow-work` | Agents implement a task in a worktree |
-| `flow-evidence` | Agents seed data, run the app, produce review evidence |
-| `flow-ship` | You approve → merge, close task, clean worktree |
-| `flow-status` | Dashboard of all tasks / worktrees / evidence |
+| Skill           | When                                                             |
+| --------------- | ---------------------------------------------------------------- |
+| `flow-init`     | First time on a project — writes `PROJECT.md`, scaffolds folders |
+| `flow-plan`     | You describe a feature — becomes tasks in the ledger             |
+| `flow-work`     | Agents implement a task in a worktree                            |
+| `flow-evidence` | Agents seed data, run the app, produce review evidence           |
+| `flow-ship`     | You approve → merge, close task, clean worktree                  |
+| `flow-status`   | Dashboard of all tasks / worktrees / evidence                    |
 
 ### Example
 
