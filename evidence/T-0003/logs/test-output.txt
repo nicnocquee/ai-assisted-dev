@@ -1,0 +1,3 @@
+No PROJECT.md in this repo (flow install / skills, not an application).
+No test, lint, or typecheck commands to run.
+Observed by reading skills/flow-status/SKILL.md on task/T-0003-task-history-status.
