@@ -2,7 +2,7 @@
 
 ## Status
 
-in_progress
+ready-for-evidence
 
 ## Summary
 
@@ -10,10 +10,10 @@ The flow-status dashboard always shows Created / Started / Done or Cancelled for
 
 ## Acceptance criteria
 
-- [ ] Every task on the dashboard shows Created, Started, and either Done or Cancelled (blank if that moment has not happened)
-- [ ] Tasks that are not `done` and not `cancelled` also show the full Status log (timestamp + state)
-- [ ] Tasks that are `done` or `cancelled` do not show the full trail — dates only
-- [ ] A cancelled task shows the Cancelled date, not Done; a shipped task shows Done, not Cancelled
+- [x] Every task on the dashboard shows Created, Started, and either Done or Cancelled (blank if that moment has not happened)
+- [x] Tasks that are not `done` and not `cancelled` also show the full Status log (timestamp + state)
+- [x] Tasks that are `done` or `cancelled` do not show the full trail — dates only
+- [x] A cancelled task shows the Cancelled date, not Done; a shipped task shows Done, not Cancelled
 
 ## Stakeholder verification scenario
 
@@ -58,4 +58,5 @@ task/T-0003-task-history-status
 | When (UTC)           | State       |
 | -------------------- | ----------- |
 | 2026-08-13T02:36:23Z | planned     |
-| 2026-08-13T02:46:56Z | in_progress |
+| 2026-08-13T02:46:56Z | in_progress        |
+| 2026-08-13T02:48:29Z | ready-for-evidence |
