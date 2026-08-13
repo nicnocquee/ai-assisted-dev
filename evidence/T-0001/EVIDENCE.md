@@ -9,7 +9,7 @@ ready-for-review
 | Kind                | SHA                                      | Notes                                              |
 | ------------------- | ---------------------------------------- | -------------------------------------------------- |
 | Implementation HEAD | 859d140e25c8a33cb6fe67356bc18fa5d24b1c96 | Branch task/T-0001-task-history-format at evidence |
-| Evidence pack       | (filled after evidence commit)           | This folder                                        |
+| Evidence pack       | 58a9aa1f489b6a031cd8abfe635c245252a40ac0 | This folder                                        |
 
 ## What changed
 
