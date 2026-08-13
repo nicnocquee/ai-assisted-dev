@@ -2,7 +2,8 @@
 name: flow-init
 description: >-
   Scaffold a repository for the Ship-Fast flow system: write PROJECT.md,
-  create tasks/docs/evidence folders, verify declared commands, first commit.
+  choose whether tasks/evidence are committed to git, create artifact
+  folders, verify declared commands, first commit.
   Use when initializing flow on a project, setting up agent workflows, or
   when the user says flow-init / set up flow / prepare this repo for agents.
 ---
@@ -16,7 +17,7 @@ Prepare an application repository so flow agents can work without inventing comm
 Resolve the flow repo root from this skill's real path (symlink target), then read:
 
 - `reference/project-contract.md`
-- `reference/conventions.md`
+- `reference/conventions.md` (especially **Flow artifacts**)
 
 Example: if skills live at `<flow-root>/skills/flow-init`, references are at `<flow-root>/reference/`.
 
@@ -33,11 +34,12 @@ Copy and track:
 Init progress:
 - [ ] 1. Detect or create git repo
 - [ ] 2. Infer stack
-- [ ] 3. Write PROJECT.md
-- [ ] 4. Scaffold tasks/, docs/, evidence/
-- [ ] 5. Update .gitignore
-- [ ] 6. Verify key commands
-- [ ] 7. Commit scaffold
+- [ ] 3. Ask where flow artifacts live (STOP until answered)
+- [ ] 4. Write PROJECT.md
+- [ ] 5. Scaffold tasks/, docs/, evidence/ at the chosen location
+- [ ] 6. Update .gitignore
+- [ ] 7. Verify key commands
+- [ ] 8. Commit scaffold (exclude local-only artifacts)
 ```
 
 ### 1. Git repo
@@ -58,7 +60,40 @@ Inspect:
 
 If empty greenfield: ask stakeholder only for product intent + optional stack preference. Otherwise choose a minimal runnable stack and own setup end-to-end.
 
-### 3. Write PROJECT.md
+### 3. Artifact git policy (hard gate)
+
+Flow artifacts are the **task ledger** (`tasks/`), **evidence packs** (`evidence/` — screenshots, seed notes, verification steps), and **feature docs** (`docs/`).
+
+**Skip this ask** only when:
+
+- The stakeholder already stated a preference in this conversation, or
+- `PROJECT.md` already has a **Flow artifacts** section (re-init: keep it unless they asked to change it)
+
+Otherwise **ask and STOP**. Prefer the `AskQuestion` tool (they can pick Other). Do not scaffold `tasks/`, `evidence/`, or `docs/`, do not write the Flow artifacts section, and do not continue until they answer.
+
+Question:
+
+> Flow writes a task ledger (`tasks/`), evidence packs (`evidence/`: screenshots, seed notes, step-by-step review), and feature docs (`docs/`). Should those be committed to this repo's git history?
+
+Options:
+
+- **A)** Yes — keep `tasks/`, `evidence/`, and `docs/` in the repo and commit them (recommended when you want an audit trail in PRs / clones)
+- **B)** No — keep them in the repo but add `tasks/`, `evidence/`, and `docs/` to `.gitignore`
+- **C)** No — store them outside the repo at `~/.flow/projects/<slug>/` (slug = repo directory name)
+
+Map the answer:
+
+| Choice | `track_in_git` | `root`                    |
+| ------ | -------------- | ------------------------- |
+| A      | `yes`          | `repo`                    |
+| B      | `no`           | `repo`                    |
+| C      | `no`           | `~/.flow/projects/<slug>` |
+
+For C, slug = basename of the repo root, kebab-case, filesystem-safe. Create that directory when scaffolding.
+
+Tell them briefly what the choice means (clones / worktrees / commits), then continue.
+
+### 4. Write PROJECT.md
 
 Use the template in project-contract.md. Fill **real** commands. Never leave fakes.
 
@@ -70,27 +105,25 @@ Declare:
 - env_files
 - at least one demo account for review
 - agent notes for seed locations
+- **Flow artifacts** with the `track_in_git` and `root` values from step 3
 
-### 4. Scaffold ledger folders
+### 5. Scaffold ledger folders
 
-Create if missing:
+Create `tasks/TASKS.md`, `docs/.gitkeep`, and `evidence/.gitkeep` under the artifact root:
 
-```
-tasks/TASKS.md
-docs/.gitkeep
-evidence/.gitkeep
-```
+- A / B: `<repo>/tasks`, `<repo>/docs`, `<repo>/evidence`
+- C: `~/.flow/projects/<slug>/tasks`, `docs`, `evidence` — do **not** create those folders in the repo
 
-`tasks/TASKS.md` starter:
+`tasks/TASKS.md` starter (match `reference/task-format.md` columns):
 
 ```markdown
 # Task ledger
 
-| ID | Title | Status | Created | Started | Done | Cancelled | Branch | Worktree | Evidence | Merge SHA | Depends on |
-|----|-------|--------|---------|---------|------|-----------|--------|----------|----------|-----------|------------|
+| ID  | Title | Status | Created | Started | Done | Cancelled | Branch | Worktree | Evidence | Merge SHA | Depends on |
+| --- | ----- | ------ | ------- | ------- | ---- | --------- | ------ | -------- | -------- | --------- | ---------- |
 ```
 
-### 5. .gitignore
+### 6. .gitignore
 
 Ensure ignored:
 
@@ -106,7 +139,20 @@ coverage/
 
 (Adapt to stack; keep `.worktrees/` always.)
 
-### 6. Verify commands
+If **B** (in-repo, not committed), also add:
+
+```
+# Flow artifacts (local only — chosen at flow-init)
+/tasks/
+/evidence/
+/docs/
+```
+
+If **C**, do not create those repo folders. You may still add `/tasks/`, `/evidence/`, and `/docs/` as a safety net so a later accidental create is not committed.
+
+If **A**, do **not** ignore `tasks/`, `evidence/`, or `docs/`.
+
+### 7. Verify commands
 
 From `PROJECT.md`:
 
@@ -118,24 +164,32 @@ From `PROJECT.md`:
 
 If a command fails, fix the project or update `PROJECT.md` — do not commit broken contracts.
 
-### 7. Commit
+### 8. Commit
 
 ```
 chore(flow): initialize flow scaffold and PROJECT.md
 ```
 
-Include: `PROJECT.md`, `tasks/`, `docs/`, `evidence/`, `.gitignore` updates, any seed stubs.
+Always include: `PROJECT.md`, `.gitignore` updates, any seed stubs.
+
+Include `tasks/`, `docs/`, and `evidence/` **only** when `track_in_git` is `yes` (choice A).
+
+Never `git add` gitignored or external artifact folders.
 
 ## Output to stakeholder
 
 Report:
 
 1. Where `PROJECT.md` lives and key commands
-2. Demo account credentials (if any)
-3. Next step: `flow-plan` with their feature request
+2. Artifact policy: committed in-repo / gitignored in-repo / stored at `<path>`
+3. Demo account credentials (if any)
+4. Next step: `flow-plan` with their feature request
 
 ## Do not
 
 - Skip verification of commands
 - Ask the stakeholder to write `PROJECT.md` or run install
 - Assume stack details not present in repo or conversation
+- Assume artifacts should be committed — ask (or honor a stated preference)
+- Continue past step 3 while the artifact question is unanswered
+- Commit `tasks/`, `evidence/`, or `docs/` when `track_in_git` is `no`

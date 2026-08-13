@@ -4,11 +4,11 @@ Personal Cursor skills and agents that let AI agents plan, build, verify, and sh
 
 ## What you get
 
-- **Auditable task ledger** in each app repo (`tasks/`)
+- **Auditable task ledger** (`tasks/`) — in the app repo and committed, gitignored locally, or stored under `~/.flow/projects/<slug>/` (chosen at `flow-init`)
 - **Parallel work** via git worktrees (one task per worktree, one dedicated `dev` port per task)
 - **Regular commits** with conventional messages
-- **Always-on documentation** under `docs/`
-- **Committed evidence packs** with seeded data, credentials, screenshots, and step-by-step human verification
+- **Feature docs** under `docs/` — same git vs local choice as the ledger and evidence
+- **Evidence packs** with seeded data, credentials, screenshots, and step-by-step human verification (committed only if you chose to track artifacts)
 - **Stakeholder ship gate** — you review evidence, then agents merge
 - **Per-role models** — builder, verifier, and reviewer each pin their own model (see below)
 
@@ -35,14 +35,14 @@ This symlinks skills into `~/.cursor/skills/` and agents into `~/.cursor/agents/
 
 ## Workflow (in any app repo)
 
-| Skill           | When                                                                            |
-| --------------- | ------------------------------------------------------------------------------- |
-| `flow-init`     | First time on a project — writes `PROJECT.md`, scaffolds folders                |
-| `flow-plan`     | You describe a feature — agent asks until nothing is assumed, then writes tasks |
-| `flow-work`     | Agents implement a task in a worktree                                           |
-| `flow-evidence` | Agents seed data, run the app, produce review evidence                          |
-| `flow-ship`     | You approve → merge, close task, clean worktree                                 |
-| `flow-status`   | Dashboard of all tasks / worktrees / evidence                                   |
+| Skill           | When                                                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `flow-init`     | First time on a project — writes `PROJECT.md`, asks whether to commit `tasks/` + `evidence/` + `docs/`, scaffolds folders |
+| `flow-plan`     | You describe a feature — agent asks until nothing is assumed, then writes tasks                                           |
+| `flow-work`     | Agents implement a task in a worktree                                                                                     |
+| `flow-evidence` | Agents seed data, run the app, produce review evidence                                                                    |
+| `flow-ship`     | You approve → merge, close task, clean worktree                                                                           |
+| `flow-status`   | Dashboard of all tasks / worktrees / evidence                                                                             |
 
 ### Example
 

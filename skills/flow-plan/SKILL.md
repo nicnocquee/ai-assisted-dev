@@ -11,20 +11,25 @@ description: >-
 
 # flow-plan
 
-Convert a feature request into ledger tasks. Stakeholder provides intent; you produce the plan in git.
+Convert a feature request into ledger tasks. Stakeholder provides intent; you produce the plan (committed to git only when artifacts are tracked).
 
 **You do not fill gaps.** If a product detail is not in the request, the repo, or a stakeholder answer, it is unknown — ask, then stop. Do not write task files until the drill-down gate is passed.
 
 ## Read first
 
-- Project `PROJECT.md`
-- `tasks/TASKS.md`
+- Project `PROJECT.md` (including **Flow artifacts**)
+- Flow `reference/conventions.md` → **Flow artifacts** — resolve `TASKS_DIR` / `TRACK_IN_GIT` before touching the ledger
+- `$TASKS_DIR/TASKS.md` and `$DOCS_DIR` if present
 - Flow reference: task-format, conventions (from the flow install root under `reference/`)
 - TS/JS standards for planning if language is TypeScript or JavaScript
 
+```bash
+eval "$(<flow-root>/reference/scripts/resolve-flow-artifacts.sh)"
+```
+
 ## Preconditions
 
-- Prefer `flow-init` completed (PROJECT.md + tasks/ present). If missing, run flow-init first.
+- Prefer `flow-init` completed (`PROJECT.md` + `$TASKS_DIR` present). If missing, run flow-init first.
 
 ## Workflow
 
@@ -36,7 +41,7 @@ Plan progress:
 - [ ] 4. Draft task breakdown
 - [ ] 5. Mark dependencies for safe parallelism
 - [ ] 6. Write task files + ledger rows
-- [ ] 7. Commit each task (or one plan commit with all tasks)
+- [ ] 7. Commit each task if `TRACK_IN_GIT=yes` (skip commits when artifacts are local-only)
 - [ ] 8. Present plan for stakeholder confirmation before heavy build
 ```
 
@@ -44,7 +49,7 @@ Plan progress:
 
 Read enough to ask grounded questions:
 
-- `PROJECT.md`, ledger, related `docs/`
+- `PROJECT.md`, `$TASKS_DIR` ledger, related `$DOCS_DIR`
 - Existing screens, APIs, models, and seed data that this request might touch
 
 Cite what you found (paths, current behavior). Then write a **facts-only** capture:
@@ -122,8 +127,8 @@ Record confirmed answers in the task Summary / Acceptance criteria so `flow-work
 
 1. Next ID = max existing `T-NNNN` + 1 (start at `T-0001`)
 2. Slug = short kebab-case title
-3. Create `tasks/T-NNNN-slug/task.md` from `reference/task-format.md`: Status `planned`, first Status log row `When` = now UTC and `State` = `planned` (no note column, no commit column)
-4. Append a `TASKS.md` row: Status `planned`, **Created** = that same timestamp, **Started / Done / Cancelled blank**
+3. Create `$TASKS_DIR/T-NNNN-slug/task.md` from `reference/task-format.md`: Status `planned`, first Status log row `When` = now UTC and `State` = `planned` (no note column, no commit column)
+4. Append a `$TASKS_DIR/TASKS.md` row: Status `planned`, **Created** = that same timestamp, **Started / Done / Cancelled blank**
 
 Acceptance criteria must be checkable by a non-coder when following evidence later.
 
@@ -141,7 +146,9 @@ Every task's Engineering notes / checklist **must** include:
 
 ### 7. Commit
 
-Preferred: one commit per task file:
+If `TRACK_IN_GIT` is `no`, do **not** `git add` `$TASKS_DIR`. Skip this step; the ledger is local-only.
+
+If `TRACK_IN_GIT` is `yes`, preferred: one commit per task file:
 
 ```
 task(T-0001): create empty-cart task
@@ -197,3 +204,4 @@ Seed requirements on the task covering verification — only what was confirmed 
 - Leave seed requirements empty when the feature is user-facing
 - Start coding in flow-plan (that is flow-work)
 - Ask the stakeholder to choose files, run commands, or write code
+- Commit `tasks/`, `evidence/`, or `docs/` when `TRACK_IN_GIT` is `no`

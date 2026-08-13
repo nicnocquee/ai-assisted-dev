@@ -4,13 +4,13 @@ This directory is a **standalone git repository** used to prove the Ship-Fast fl
 
 ## Proven trail
 
-| Stage | Result |
-|-------|--------|
-| flow-init | `PROJECT.md`, `tasks/`, `docs/`, `evidence/` committed |
-| flow-plan | `T-0001` empty-cart task in ledger |
-| flow-work | Worktree `.worktrees/T-0001` on `task/T-0001-empty-cart` |
-| flow-evidence | Seeded user/products/cart; EVIDENCE.md + screenshots committed |
-| flow-ship | `--no-ff` merge + ledger Merge SHA + worktree removed |
+| Stage         | Result                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------------------- |
+| flow-init     | `PROJECT.md`, `tasks/`, `docs/`, `evidence/` committed (this demo used in-repo git-tracked artifacts) |
+| flow-plan     | `T-0001` empty-cart task in ledger                                                                    |
+| flow-work     | Worktree `.worktrees/T-0001` on `task/T-0001-empty-cart`                                              |
+| flow-evidence | Seeded user/products/cart; EVIDENCE.md + screenshots committed                                        |
+| flow-ship     | `--no-ff` merge + ledger Merge SHA + worktree removed                                                 |
 
 ### Audit pointers (demo shop commits)
 

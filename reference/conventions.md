@@ -97,9 +97,40 @@ git worktree add .worktrees/T-0001 -b task/T-0001-empty-cart main
 git worktree remove .worktrees/T-0001
 ```
 
+## Flow artifacts
+
+`tasks/` (ledger), `evidence/` (review packs), and `docs/` (feature / API / ADR write-ups) are **flow artifacts**.
+
+Policy lives in `PROJECT.md` → **Flow artifacts** (`track_in_git`, `root`). Chosen once at `flow-init`. If the section is missing, assume `track_in_git: yes` and `root: repo`.
+
+### Resolve paths (every skill, before reading or writing artifacts)
+
+From the app repo (or a task worktree):
+
+```bash
+FLOW_ROOT="$(cd "$(dirname "$(readlink -f ~/.cursor/skills/flow-work)")/.." && pwd)"
+eval "$("${FLOW_ROOT}/reference/scripts/resolve-flow-artifacts.sh")"
+# TRACK_IN_GIT, ARTIFACT_ROOT, TASKS_DIR, EVIDENCE_DIR, DOCS_DIR
+```
+
+Or pass an explicit `PROJECT.md` path as the first argument.
+
+| Policy                             | `TASKS_DIR` / `EVIDENCE_DIR` / `DOCS_DIR` | Why                                                    |
+| ---------------------------------- | ----------------------------------------- | ------------------------------------------------------ |
+| `track_in_git: yes`, `root: repo`  | Current worktree                          | Files are committed; the task branch has them          |
+| `track_in_git: no`, `root: repo`   | **Main** worktree only                    | Gitignored files are not copied into new worktrees     |
+| `track_in_git: no`, `root: <path>` | That absolute path                        | Shared outside git; all worktrees use the same folders |
+
+Never write artifacts relative to a task worktree when `TRACK_IN_GIT` is `no` — use the resolved absolute dirs. Pass those absolute paths into builder / verifier prompts.
+
+### Committing artifacts
+
+- `TRACK_IN_GIT=yes`: commit ledger, docs, and evidence as today (`task(…)`, `docs(…)`, `evidence(…)`, `chore(…): mark …`, `ship(…): close task ledger`).
+- `TRACK_IN_GIT=no`: write the same files to `TASKS_DIR` / `EVIDENCE_DIR` / `DOCS_DIR`, but **never** `git add` `tasks/`, `evidence/`, or `docs/`. Skip any commit that would contain only those folders. Still commit application code. In `EVIDENCE.md`, set Evidence pack SHA to `n/a (artifacts not tracked in git)`.
+
 ## Documentation
 
-Every shipped task updates product docs under `docs/`:
+Every shipped task updates product docs under `$DOCS_DIR` (usually `docs/`):
 
 | Path                      | Contents                                          |
 | ------------------------- | ------------------------------------------------- |
@@ -107,7 +138,7 @@ Every shipped task updates product docs under `docs/`:
 | `docs/api/<slug>.md`      | Endpoints / contracts if applicable               |
 | `docs/adr/`               | Architecture decisions when justified             |
 
-Docs are committed as part of the task branch, not as an afterthought.
+When `track_in_git` is `yes`, docs are committed as part of the task branch, not as an afterthought. When `no`, write them to `DOCS_DIR` only.
 
 ## Code quality gates (always)
 

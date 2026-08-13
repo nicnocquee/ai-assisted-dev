@@ -13,10 +13,17 @@ Execute a single ledger task end-to-end inside an isolated worktree. Stakeholder
 
 ## Read first
 
-- `PROJECT.md`
-- `tasks/T-NNNN-slug/task.md` and `tasks/TASKS.md`
-- Flow `reference/conventions.md` and `reference/task-format.md` (especially **Dev server ports**)
+- `PROJECT.md` (including **Flow artifacts**)
+- Flow `reference/conventions.md` → **Flow artifacts** and **Dev server ports**
+- `$TASKS_DIR/T-NNNN-slug/task.md` and `$TASKS_DIR/TASKS.md`
+- Flow `reference/task-format.md`
 - Agent definition `flow-builder` (when launching a subagent)
+
+```bash
+eval "$(<flow-root>/reference/scripts/resolve-flow-artifacts.sh)"
+```
+
+When `TRACK_IN_GIT` is `no`, ledger and docs writes go to the resolved absolute `TASKS_DIR` / `DOCS_DIR` (main worktree or external path) — never to `tasks/` or `docs/` inside the task worktree.
 
 ## Inputs
 
@@ -30,11 +37,11 @@ Work progress:
 - [ ] 1. Check dependencies done
 - [ ] 2. Create branch + worktree
 - [ ] 3. Assign dedicated PORT + base_url
-- [ ] 4. Status → in_progress (commit)
+- [ ] 4. Status → in_progress (commit ledger only if `TRACK_IN_GIT=yes`)
 - [ ] 5. Implement via flow-builder (or inline)
 - [ ] 6. Tests + lint/typecheck green
-- [ ] 7. Docs under docs/
-- [ ] 8. Status → ready-for-evidence (commit)
+- [ ] 7. Docs under $DOCS_DIR
+- [ ] 8. Status → ready-for-evidence (commit ledger only if `TRACK_IN_GIT=yes`)
 - [ ] 9. Hand off to flow-evidence (pass PORT)
 ```
 
@@ -94,26 +101,31 @@ Never start two tasks on the same port. On `EADDRINUSE`, re-pick upward — do n
 
 ### 4. Mark in progress
 
-1. Set `task.md` Status to `in_progress`
+1. Set `$TASKS_DIR/.../task.md` Status to `in_progress`
 2. Append a Status log row: `When` = now UTC, `State` = `in_progress` (timestamp + state only)
-3. Update `TASKS.md`: Status `in_progress`, **Started** = that timestamp (overwrite if it was set before), Branch, Worktree
+3. Update `$TASKS_DIR/TASKS.md`: Status `in_progress`, **Started** = that timestamp (overwrite if it was set before), Branch, Worktree
 
 If the task cannot start (dependency or missing API), set Status `blocked`, append `blocked`, leave Started as-is (blank if never started).
 
-Commit on the **task branch** (from inside worktree):
+If `TRACK_IN_GIT` is `yes`, commit on the **task branch** (from inside worktree):
 
 ```
 chore(T-NNNN): start work
 ```
 
+If `TRACK_IN_GIT` is `no`, write the ledger files only — do not `git add` `tasks/` or `docs/`.
+
 ### 5. Build
 
 Prefer launching the **flow-builder** agent scoped to the worktree path. Do **not** pass a model unless the stakeholder named one — `flow-builder` is pinned to `composer-2.5[fast=false]` (see `reference/conventions.md` → Agent models). Include in the prompt:
 
+- Absolute path to `task.md` (`$TASKS_DIR/T-NNNN-slug/task.md`) and `$TASKS_DIR/TASKS.md`
+- Absolute `$DOCS_DIR` for feature docs
+- `TRACK_IN_GIT` — if `no`, update ledger/docs on disk and never `git add` `tasks/`, `evidence/`, or `docs/`
 - Task acceptance criteria and seed requirements (for later)
 - PROJECT.md commands
 - **Assigned `PORT` and `BASE_URL`** (use for any local smoke check; do not bind `default_port`)
-- Convention: commit every logical unit; never ask stakeholder to run commands
+- Convention: commit every logical unit of **application code** (and docs only if `TRACK_IN_GIT=yes`); never ask stakeholder to run commands
 - TS/JS standards when applicable (JSDoc, DI, co-located tests, kebab-case, lint/types)
 
 Builder loop:
@@ -136,28 +148,32 @@ All must pass before next status:
 
 ### 7. Documentation
 
-Write/update:
+Write/update under `$DOCS_DIR`:
 
-- `docs/features/<slug>.md` (required for user-facing work)
+- `features/<slug>.md` (required for user-facing work)
 - API docs if endpoints added
 
-Commit:
+If `TRACK_IN_GIT` is `yes`, commit:
 
 ```
 docs(T-NNNN): document <feature>
 ```
 
+If `no`, write the files only — do not `git add` `docs/`.
+
 ### 8. ready-for-evidence
 
 1. Set Status `ready-for-evidence`
 2. Append Status log row `ready-for-evidence`
-3. Update `TASKS.md` Status (do not fill Done or Cancelled)
+3. Update `$TASKS_DIR/TASKS.md` Status (do not fill Done or Cancelled)
 
-Commit:
+If `TRACK_IN_GIT` is `yes`, commit:
 
 ```
 chore(T-NNNN): mark ready-for-evidence
 ```
+
+If `no`, write the ledger only.
 
 ### 9. Handoff
 
@@ -175,7 +191,8 @@ When multiple tasks are parallel-safe:
 ## Do not
 
 - Implement on `main`
-- Leave uncommitted work when finishing a stage
+- Leave uncommitted **application code** when finishing a stage
+- Commit `tasks/`, `evidence/`, or `docs/` when `TRACK_IN_GIT` is `no`
 - Skip docs
 - Ask the stakeholder to run install/test/dev
 - Mark ready-for-evidence with red tests

@@ -1,8 +1,10 @@
 # Evidence pack format
 
-Evidence is how agents prove work without requiring the stakeholder to set anything up. Every finished task ships with a **committed** evidence pack that links to the implementation commit SHA.
+Evidence is how agents prove work without requiring the stakeholder to set anything up. Every finished task ships with an evidence pack that links to the implementation commit SHA. When `PROJECT.md` → Flow artifacts has `track_in_git: yes` (default if missing), the pack is committed. When `track_in_git: no`, write the pack under the resolved `EVIDENCE_DIR` and do not commit it.
 
 ## Layout
+
+Resolve `EVIDENCE_DIR` first (`reference/conventions.md` → Flow artifacts). Relative to that directory:
 
 ```
 evidence/
@@ -18,7 +20,7 @@ evidence/
 ## Hard requirements
 
 1. **Linked commit** — `Implementation commit` field must be a real SHA from the task branch
-2. **Evidence commit** — pack is committed as `evidence(T-NNNN): ...` so the pack itself has a SHA
+2. **Evidence commit** — when `track_in_git` is `yes`, commit the pack as `evidence(T-NNNN): ...` so the pack itself has a SHA. When `no`, skip that commit and set Evidence pack SHA to `n/a (artifacts not tracked in git)`
 3. **Seeded readiness** — after following Start commands, the human must not need to create data
 4. **Credentials** — demo username and password in plain text (demo-only)
 5. **Step-by-step** — numbered verification that a non-developer can follow

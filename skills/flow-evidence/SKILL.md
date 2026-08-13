@@ -1,9 +1,10 @@
 ---
 name: flow-evidence
 description: >-
-  Build a committed flow evidence pack for a task: db-reset/seed, run app,
+  Build a flow evidence pack for a task: db-reset/seed, run app,
   screenshots, test logs, credentials, and human step-by-step verification
-  linked to implement commit SHAs. Use after ready-for-evidence, when preparing
+  linked to implement commit SHAs. Commit the pack only when artifacts are
+  tracked in git. Use after ready-for-evidence, when preparing
   review materials, or when the user says flow-evidence / prove it works.
 ---
 
@@ -13,11 +14,17 @@ Produce observational proof that a task works for a stakeholder without their ma
 
 ## Read first
 
-- `PROJECT.md`
-- Task file + acceptance criteria + seed requirements
+- `PROJECT.md` (including **Flow artifacts**)
+- Flow `reference/conventions.md` → **Flow artifacts** and **Dev server ports**
+- Task file + acceptance criteria + seed requirements (`$TASKS_DIR`)
 - Flow `reference/evidence-format.md`
-- Flow `reference/conventions.md` → **Dev server ports**
 - Agent `flow-verifier`
+
+```bash
+eval "$(<flow-root>/reference/scripts/resolve-flow-artifacts.sh)"
+```
+
+Write the pack under `$EVIDENCE_DIR/T-NNNN/`. When `TRACK_IN_GIT` is `no`, that directory is the main worktree or the external root — not `evidence/` inside the task worktree.
 
 ## Preconditions
 
@@ -34,12 +41,12 @@ Evidence progress:
 - [ ] 3. db-reset + seed (or seed if no reset)
 - [ ] 4. Start app (dev); confirm base_url
 - [ ] 5. Walk feature (browser preferred); screenshots
-- [ ] 6. Write evidence/T-NNNN/EVIDENCE.md
-- [ ] 7. Commit evidence pack; record SHAs
+- [ ] 6. Write $EVIDENCE_DIR/T-NNNN/EVIDENCE.md
+- [ ] 7. Commit evidence pack if `TRACK_IN_GIT=yes`; record SHAs
 - [ ] 8. Status → evidence-ready; hand off flow-ship
 ```
 
-Prefer delegating steps 2–6 to **flow-verifier**. Do **not** pass a model unless the stakeholder named one — `flow-verifier` is pinned to `composer-2.5[fast=true]` (see `reference/conventions.md` → Agent models). Parent ensures commits and status updates.
+Prefer delegating steps 2–6 to **flow-verifier**. Do **not** pass a model unless the stakeholder named one — `flow-verifier` is pinned to `composer-2.5[fast=true]` (see `reference/conventions.md` → Agent models). Parent ensures commits (when tracked) and status updates. Pass absolute `$EVIDENCE_DIR` and `$TASKS_DIR` plus `TRACK_IN_GIT` in the verifier prompt.
 
 ### 1. Implementation SHA
 
@@ -54,7 +61,7 @@ Record as Implementation HEAD.
 
 Run from worktree using PROJECT.md:
 
-- test → save summary to `evidence/T-NNNN/logs/test-output.txt`
+- test → save summary to `$EVIDENCE_DIR/T-NNNN/logs/test-output.txt`
 - lint / typecheck if applicable
 
 Failing checks → append Status log `verify-failed`, then set Status to `in_progress` or `blocked` (append that row too), notify builder. No fake passes. No notes or commit SHAs on the Status log.
@@ -97,7 +104,7 @@ With browser automation when UI:
 
 1. Log in as seeded user
 2. Navigate to feature surface
-3. Capture screenshots into `evidence/T-NNNN/screenshots/`
+3. Capture screenshots into `$EVIDENCE_DIR/T-NNNN/screenshots/`
 4. Perform the happy path (e.g. empty cart)
 5. Confirm expected outcomes from acceptance criteria
 
@@ -118,7 +125,9 @@ Follow `reference/evidence-format.md` template completely:
 
 ### 7. Commit evidence
 
-From worktree:
+If `TRACK_IN_GIT` is `no`: do not `git add` `$EVIDENCE_DIR` or `$DOCS_DIR`. Set Evidence pack SHA to `n/a (artifacts not tracked in git)`.
+
+If `TRACK_IN_GIT` is `yes`, from worktree:
 
 ```bash
 git add evidence/T-NNNN docs/  # if docs updated
@@ -136,15 +145,17 @@ evidence(T-NNNN): link evidence commit SHA
 
 - Status → `evidence-ready`
 - Append Status log row `evidence-ready` (timestamp + state only)
-- TASKS.md Evidence column → `evidence/T-NNNN/EVIDENCE.md`
+- `$TASKS_DIR/TASKS.md` Evidence column → `$EVIDENCE_DIR/T-NNNN/EVIDENCE.md` (use the path you will show the stakeholder)
 
 If verify fails after a walk: append `verify-failed`, then Status `in_progress` or `blocked` with its own row. Do not mark evidence-ready.
 
-Commit:
+If `TRACK_IN_GIT` is `yes`, commit:
 
 ```
 chore(T-NNNN): mark evidence-ready
 ```
+
+If `no`, write the ledger only.
 
 Present a short review blurb to the stakeholder pointing at the evidence file, credentials, and base_url. Then use **flow-ship**.
 

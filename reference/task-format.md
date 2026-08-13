@@ -1,8 +1,10 @@
 # Task format and ledger
 
-Tasks are the auditable unit of work. Every status change and spec change is committed to git.
+Tasks are the auditable unit of work. Every status change and spec change is written to the ledger. When `PROJECT.md` → Flow artifacts has `track_in_git: yes` (the default if the section is missing), those writes are committed to git. When `track_in_git: no`, write the same files under the resolved `TASKS_DIR` and do not commit them.
 
 ## Layout
+
+Resolve `TASKS_DIR` first (`reference/conventions.md` → Flow artifacts). Relative to that directory:
 
 ```
 tasks/
@@ -41,10 +43,10 @@ Every state change is appended to the task's Status log. Each row is **When (UTC
 
 Log `State` is either a lifecycle status (same names as the Status field) or one of these **log-only** names (they never appear in the Status field):
 
-| Log-only name    | When to append                                                     |
-| ---------------- | ------------------------------------------------------------------ |
-| `verify-failed`  | Evidence / verify did not pass                                     |
-| `sent-back`      | Stakeholder rejected review and sent the task back                 |
+| Log-only name   | When to append                                     |
+| --------------- | -------------------------------------------------- |
+| `verify-failed` | Evidence / verify did not pass                     |
+| `sent-back`     | Stakeholder rejected review and sent the task back |
 
 After a log-only name, append a second row for the lifecycle status the task actually moves to (`in_progress`, `blocked`, `ready-for-evidence`, or `cancelled`).
 
@@ -58,25 +60,25 @@ After a log-only name, append a second row for the lifecycle status the task act
 | T-0001 | Empty cart | planned | 2026-01-01T00:00:00Z |         |      |           | task/T-0001-empty-cart |          |          |           |            |
 ```
 
-Keep this table sorted by ID ascending. Update it whenever status, dates, branch, evidence, or merge changes and **commit the update**.
+Keep this table sorted by ID ascending. Update it whenever status, dates, branch, evidence, or merge changes. **Commit the update** when `track_in_git` is `yes`; otherwise write the file only.
 
 ### Ledger dates
 
-| Column      | Meaning                                                                 | When to fill                                      |
-| ----------- | ----------------------------------------------------------------------- | ------------------------------------------------- |
-| Created     | When the task file was written                                          | Once, at create; never overwrite                  |
-| Started     | Latest time the task moved to `in_progress`                             | Every move to `in_progress` (overwrites previous) |
-| Done        | When the task was shipped (`done`)                                      | On ship; leave blank otherwise                    |
-| Cancelled   | When the task was abandoned (`cancelled`)                               | On cancel; leave blank otherwise                  |
+| Column    | Meaning                                     | When to fill                                      |
+| --------- | ------------------------------------------- | ------------------------------------------------- |
+| Created   | When the task file was written              | Once, at create; never overwrite                  |
+| Started   | Latest time the task moved to `in_progress` | Every move to `in_progress` (overwrites previous) |
+| Done      | When the task was shipped (`done`)          | On ship; leave blank otherwise                    |
+| Cancelled | When the task was abandoned (`cancelled`)   | On cancel; leave blank otherwise                  |
 
 Blank means that moment has not happened. Done and Cancelled are separate; **only one is filled**.
 
-| Situation              | Created | Started | Done | Cancelled |
-| ---------------------- | ------- | ------- | ---- | --------- |
-| Planned, never started | filled  | blank   | blank | blank    |
-| Cancelled before start | filled  | blank   | blank | filled   |
-| Shipped                | filled  | filled  | filled | blank   |
-| Cancelled after start  | filled  | filled  | blank | filled   |
+| Situation              | Created | Started | Done   | Cancelled |
+| ---------------------- | ------- | ------- | ------ | --------- |
+| Planned, never started | filled  | blank   | blank  | blank     |
+| Cancelled before start | filled  | blank   | blank  | filled    |
+| Shipped                | filled  | filled  | filled | blank     |
+| Cancelled after start  | filled  | filled  | blank  | filled    |
 
 ## task.md template
 
@@ -161,7 +163,7 @@ Do not create files until `flow-plan` has finished its drill-down gate (no inven
 1. Assign next ID
 2. Write `tasks/T-NNNN-slug/task.md` with Status `planned` and a first Status log row (`When` = now UTC, `State` = `planned`)
 3. Append a `TASKS.md` row: Status `planned`, Created = that same timestamp, Started / Done / Cancelled blank
-4. Commit: `task(T-NNNN): create <slug> task`
+4. If `track_in_git` is `yes`, commit: `task(T-NNNN): create <slug> task`. If `no`, skip the commit.
 
 ## Parallelism and dependencies
 
@@ -174,4 +176,4 @@ Do not create files until `flow-plan` has finished its drill-down gate (no inven
 1. Edit Status field in `task.md` (lifecycle status only)
 2. Append a Status log row: `When (UTC)` + `State` only. For `verify-failed` or `sent-back`, append that log-only row, then a lifecycle-status row
 3. Update `TASKS.md`: Status, and Created / Started / Done / Cancelled as defined above
-4. Commit with appropriate type (`chore`, `task`, `feat`, etc.)
+4. If `track_in_git` is `yes`, commit with appropriate type (`chore`, `task`, `feat`, etc.). If `no` and the change is only ledger files, skip the commit.

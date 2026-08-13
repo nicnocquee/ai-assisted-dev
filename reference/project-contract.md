@@ -42,12 +42,29 @@
 ## Notes for agents
 
 - (paths for migrations, seed scripts, auth, special env vars)
+
+## Flow artifacts
+
+- track_in_git: yes
+- root: repo
 ```
+
+`track_in_git` and `root` are chosen at `flow-init` (do not invent them later):
+
+| `track_in_git` | `root`                    | Meaning                                                                                     |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------- |
+| `yes`          | `repo`                    | `tasks/`, `evidence/`, and `docs/` live in the app repo and are committed                   |
+| `no`           | `repo`                    | Same folders in the **main** worktree, listed in `.gitignore`                               |
+| `no`           | `~/.flow/projects/<slug>` | Folders live outside the repo; nothing under `tasks/`, `evidence/`, or `docs/` is committed |
+
+Missing section → treat as `track_in_git: yes`, `root: repo` (backward compatible).
+
+Resolve paths with `reference/scripts/resolve-flow-artifacts.sh` (see `reference/conventions.md` → Flow artifacts).
 
 ## Rules for agents
 
 1. **Discover, don't invent.** If a command is missing or fails, update `PROJECT.md` after fixing it; do not invent alternate commands silently.
-2. **Verify on init.** `flow-init` must run each declared command (or a dry-equivalent) and only commit once commands are truthful.
+2. **Verify on init.** `flow-init` must run each declared command (or a dry-equivalent) and only commit once commands are truthful. Honor `Flow artifacts`: never commit `tasks/`, `evidence/`, or `docs/` when `track_in_git` is `no`.
 3. **Prefer declared seeds.** Feature evidence must use `seed` and document credentials in both seed output and `EVIDENCE.md`.
 4. **Stack-agnostic.** Do not assume Node/Python/etc. without reading Stack.
 5. **Ports.** Never start parallel task worktrees on the same `default_port`. Assign `default_port + N` (task number from `T-NNNN`), scan upward if busy, start with `PORT=<port> <dev>`, and document the actual `base_url` in evidence. See `reference/conventions.md` → Dev server ports.
@@ -94,6 +111,11 @@
 - Prisma schema: prisma/schema.prisma
 - Seed: prisma/seed.ts
 - Keep seed passwords in docs/env examples as non-production only
+
+## Flow artifacts
+
+- track_in_git: yes
+- root: repo
 ```
 
 ## Minimal scaffold when unknown

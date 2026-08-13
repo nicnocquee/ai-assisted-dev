@@ -13,15 +13,19 @@ Close the loop: human approval → auditable merge → ledger update → cleanup
 
 ## Read first
 
-- `evidence/T-NNNN/EVIDENCE.md`
-- Task file + TASKS.md
+- `$EVIDENCE_DIR/T-NNNN/EVIDENCE.md` (resolve via `reference/conventions.md` → Flow artifacts)
+- Task file + `$TASKS_DIR/TASKS.md`
 - `reference/conventions.md`
 - Agent `flow-reviewer` (optional pre-check)
+
+```bash
+eval "$(<flow-root>/reference/scripts/resolve-flow-artifacts.sh)"
+```
 
 ## Preconditions
 
 - Status is `evidence-ready` or stakeholder explicitly approves mid-review
-- Evidence pack committed and credentials present
+- Evidence pack present (committed if `TRACK_IN_GIT=yes`) and credentials present
 - Branch exists and is mergeable into default branch
 
 ## Workflow
@@ -33,7 +37,7 @@ Ship progress:
 - [ ] 3. Wait for explicit approval or change requests
 - [ ] 4. On reject: return to builder / new evidence
 - [ ] 5. On approve: merge --no-ff into default branch
-- [ ] 6. Record merge SHA; status → done; commit ledger on main
+- [ ] 6. Record merge SHA; status → done; commit ledger on main if `TRACK_IN_GIT=yes`
 - [ ] 7. Remove worktree; report complete trail
 ```
 
@@ -48,14 +52,16 @@ Summarize:
 1. What they can try (base_url, left running? start command)
 2. Credentials
 3. Step-by-step verification list from EVIDENCE.md
-4. Link paths: `evidence/T-NNNN/EVIDENCE.md`, docs feature page
+4. Link paths: `$EVIDENCE_DIR/T-NNNN/EVIDENCE.md`, docs feature page
 5. Implementation + evidence SHAs
 
-Update status to `in-review`, append Status log row `in-review` (timestamp + state only), update `TASKS.md` Status. Commit on the task branch if not already:
+Update status to `in-review`, append Status log row `in-review` (timestamp + state only), update `$TASKS_DIR/TASKS.md` Status. If `TRACK_IN_GIT` is `yes`, commit on the task branch if not already:
 
 ```
 chore(T-NNNN): mark in-review for stakeholder
 ```
+
+If `no`, write the ledger only.
 
 ### 3. Approval
 
@@ -63,7 +69,7 @@ chore(T-NNNN): mark in-review for stakeholder
 
 Change requests → append Status log `sent-back`, then set Status to `in_progress` or `ready-for-evidence` (append that row; if `in_progress`, set **Started** to that timestamp). Hand back to flow-work / flow-evidence. No notes on the Status log — put the request in the task Summary or a reply to the stakeholder.
 
-If the stakeholder cancels the task: Status `cancelled`, append `cancelled`, fill **Cancelled**, leave **Done** blank, commit, do not merge.
+If the stakeholder cancels the task: Status `cancelled`, append `cancelled`, fill **Cancelled**, leave **Done** blank; commit the ledger only if `TRACK_IN_GIT` is `yes`. Do not merge.
 
 ### 4. Merge (--no-ff)
 
@@ -75,7 +81,7 @@ git checkout "${DEFAULT_BRANCH}"
 git pull --ff-only 2>/dev/null || true
 git merge --no-ff "task/T-NNNN-slug" -m "ship(T-NNNN): merge <title>
 
-Evidence: evidence/T-NNNN/EVIDENCE.md
+Evidence: <path to EVIDENCE.md>
 Implementation reviewed by stakeholder."
 MERGE_SHA=$(git rev-parse HEAD)
 ```
@@ -89,11 +95,13 @@ Update after merge:
 - task.md Status `done`, Merge SHA = `$MERGE_SHA`, append Status log `done`
 - TASKS.md: Status `done`, **Done** = that timestamp, **Cancelled** blank, merge SHA filled, worktree cleared
 
-Commit on default branch:
+If `TRACK_IN_GIT` is `yes`, commit on default branch:
 
 ```
 ship(T-NNNN): close task ledger
 ```
+
+If `no`, write the ledger only — do not `git add` `tasks/`, `evidence/`, or `docs/`.
 
 ### 6. Cleanup
 
@@ -107,17 +115,18 @@ git branch -d "task/T-NNNN-slug" 2>/dev/null || true
 
 Give the audit trail:
 
-| Field     | Value                       |
-| --------- | --------------------------- |
-| Task      | T-NNNN                      |
-| Merge SHA | …                           |
-| Evidence  | evidence/T-NNNN/EVIDENCE.md |
-| Branch    | task/T-NNNN-slug (merged)   |
+| Field     | Value                            |
+| --------- | -------------------------------- |
+| Task      | T-NNNN                           |
+| Merge SHA | …                                |
+| Evidence  | $EVIDENCE_DIR/T-NNNN/EVIDENCE.md |
+| Branch    | task/T-NNNN-slug (merged)        |
 
 ## Do not
 
 - Merge without stakeholder approval
 - Fast-forward only (use `--no-ff`)
-- Drop evidence from history
+- Drop evidence from history when `TRACK_IN_GIT` is `yes`
+- Commit `tasks/`, `evidence/`, or `docs/` when `TRACK_IN_GIT` is `no`
 - Leave orphaned worktrees
 - Ask the stakeholder to run `git merge`
