@@ -30,8 +30,8 @@ Blank means that moment has not happened. Done and Cancelled are never both fill
 
 Never started → Started blank. Cancelled before start → Created and Cancelled only. Shipped → Created, Started, and Done.
 
-## On flow-status
+## On flow-status (T-0003)
 
-Every task shows Created / Started / Done or Cancelled. Open tasks also show the full log. Closed tasks (`done` or `cancelled`) show dates only.
+Not in this task. After T-0003, the dashboard will show Created / Started / Done or Cancelled for every task, and the full log only for open tasks.
 
-Writer skills and the dashboard are updated in T-0002 and T-0003; this document describes the contract in `reference/task-format.md`.
+Writer skills land in T-0002. This document describes the contract in `reference/task-format.md`.

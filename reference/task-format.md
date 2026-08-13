@@ -46,7 +46,7 @@ Log `State` is either a lifecycle status (same names as the Status field) or one
 | `verify-failed`  | Evidence / verify did not pass                                     |
 | `sent-back`      | Stakeholder rejected review and sent the task back                 |
 
-After a log-only name, append a second row for the lifecycle status the task actually moves to (`in_progress`, `blocked`, or `ready-for-evidence`).
+After a log-only name, append a second row for the lifecycle status the task actually moves to (`in_progress`, `blocked`, `ready-for-evidence`, or `cancelled`).
 
 ## TASKS.md columns
 

@@ -19,23 +19,23 @@ ready-for-review
 
 ## Automated checks
 
-| Check     | Command | Result                                      |
-| --------- | ------- | ------------------------------------------- |
-| test      | n/a     | No PROJECT.md; this repo is skills/docs     |
-| lint      | n/a     | No PROJECT.md                               |
-| typecheck | n/a     | No PROJECT.md                               |
+| Check     | Command | Result                                  |
+| --------- | ------- | --------------------------------------- |
+| test      | n/a     | No PROJECT.md; this repo is skills/docs |
+| lint      | n/a     | No PROJECT.md                           |
+| typecheck | n/a     | No PROJECT.md                           |
 
 Artifacts: logs/test-output.txt
 
 ## Local runtime setup (already done by agents if marked running)
 
-| Item                        | Value                                      |
-| --------------------------- | ------------------------------------------ |
-| base_url                    | n/a — no app                               |
-| seed command                | n/a — seed requirements: none              |
-| db-reset command            | n/a                                        |
-| agent left app running      | no                                         |
-| how to start if not running | n/a — open the files listed in the steps   |
+| Item                        | Value                                    |
+| --------------------------- | ---------------------------------------- |
+| base_url                    | n/a — no app                             |
+| seed command                | n/a — seed requirements: none            |
+| db-reset command            | n/a                                      |
+| agent left app running      | no                                       |
+| how to start if not running | n/a — open the files listed in the steps |
 
 ## Seeded demo data
 
