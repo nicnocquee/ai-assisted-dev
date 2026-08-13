@@ -48,9 +48,10 @@ You prove a task works **from a clean, known world** and produce a committed-rea
 If anything fails:
 
 1. Do not mark evidence-ready
-2. Write short FAIL notes in task status log (or a draft evidence section `## Failures`)
-3. Set status back toward `in_progress` recommendation
-4. List exact failures for flow-builder
+2. Append Status log `verify-failed` (timestamp + state only)
+3. Set Status to `in_progress` or `blocked` and append that row
+4. Put FAIL details in evidence `## Failures` (or the report to the parent), not on the Status log
+5. List exact failures for flow-builder
 
 ## Forbidden
 

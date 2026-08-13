@@ -84,7 +84,7 @@ BASE_URL="http://localhost:${PORT}"
 
 Or use `reference/scripts/pick-flow-port.sh` from the flow install (see conventions).
 
-Record `PORT` / `BASE_URL` in the task status log (or builder prompt). Start the app only as:
+Pass `PORT` / `BASE_URL` in the **builder prompt** (not the Status log). Start the app only as:
 
 ```bash
 PORT="$PORT" <dev command from PROJECT.md>
@@ -94,7 +94,11 @@ Never start two tasks on the same port. On `EADDRINUSE`, re-pick upward — do n
 
 ### 4. Mark in progress
 
-Update task.md status + status log + TASKS.md columns (Branch, Worktree).
+1. Set `task.md` Status to `in_progress`
+2. Append a Status log row: `When` = now UTC, `State` = `in_progress` (timestamp + state only)
+3. Update `TASKS.md`: Status `in_progress`, **Started** = that timestamp (overwrite if it was set before), Branch, Worktree
+
+If the task cannot start (dependency or missing API), set Status `blocked`, append `blocked`, leave Started as-is (blank if never started).
 
 Commit on the **task branch** (from inside worktree):
 
@@ -145,7 +149,11 @@ docs(T-NNNN): document <feature>
 
 ### 8. ready-for-evidence
 
-Update task status fields + ledger. Commit:
+1. Set Status `ready-for-evidence`
+2. Append Status log row `ready-for-evidence`
+3. Update `TASKS.md` Status (do not fill Done or Cancelled)
+
+Commit:
 
 ```
 chore(T-NNNN): mark ready-for-evidence
@@ -172,3 +180,4 @@ When multiple tasks are parallel-safe:
 - Ask the stakeholder to run install/test/dev
 - Mark ready-for-evidence with red tests
 - Start `dev` on `default_port` when another flow task may already be using it
+- Write a note column or commit SHA on the Status log

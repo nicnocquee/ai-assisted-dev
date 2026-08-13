@@ -118,7 +118,7 @@ Artifacts: logs/test-output.txt (if captured)
 
 - Prefer **db-reset then seed** so environment is known
 - Prefer capturing screenshots via browser tools when possible
-- If verification fails: do **not** mark evidence ready; file status `blocked` or return to `in_progress` with log notes
+- If verification fails: do **not** mark evidence ready; append Status log `verify-failed`, then Status `blocked` or `in_progress` with its own row (no notes on the Status log)
 - Never invent screenshots or test pass results
 
 ## Example domain packing (empty cart)

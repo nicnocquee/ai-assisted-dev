@@ -28,12 +28,12 @@ You implement **one** flow task completely from engineering side until `ready-fo
 2. **Tests**: keep suite green; for TS/JS, co-located unit tests, 100% coverage of new logic, JSDoc, DI with production defaults, kebab-case files.
 3. **Docs**: `docs/features/<slug>.md` (and API docs if relevant).
 4. **Quality**: run `test`, `lint`, `typecheck` from PROJECT.md before finishing.
-5. **Status**: update task status log when starting and when ready-for-evidence.
+5. **Status**: Status log is timestamp + state only (no notes, no commit SHAs). On start: Status `in_progress`, append `in_progress`, set ledger **Started** (overwrite). On finish: Status `ready-for-evidence`, append that row. On block: Status `blocked`, append `blocked`.
 
 ## Loop
 
 1. Read task.md + PROJECT.md + existing code
-2. Plan touches; if blocked by missing dependency API, set status `blocked` and stop with a clear note
+2. Plan touches; if blocked by missing dependency API, set Status `blocked`, append Status log `blocked`, report the reason to the parent (not on the Status log), and stop
 3. Implement with tests
 4. Run checks; fix until green
 5. Write/update docs

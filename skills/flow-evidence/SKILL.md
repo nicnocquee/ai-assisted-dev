@@ -57,7 +57,7 @@ Run from worktree using PROJECT.md:
 - test → save summary to `evidence/T-NNNN/logs/test-output.txt`
 - lint / typecheck if applicable
 
-Failing checks → return task to `in_progress`, notify builder. No fake passes.
+Failing checks → append Status log `verify-failed`, then set Status to `in_progress` or `blocked` (append that row too), notify builder. No fake passes. No notes or commit SHAs on the Status log.
 
 ### 3. Data readiness
 
@@ -135,8 +135,10 @@ evidence(T-NNNN): link evidence commit SHA
 ### 8. Ledger
 
 - Status → `evidence-ready`
+- Append Status log row `evidence-ready` (timestamp + state only)
 - TASKS.md Evidence column → `evidence/T-NNNN/EVIDENCE.md`
-- Status log row with SHAs
+
+If verify fails after a walk: append `verify-failed`, then Status `in_progress` or `blocked` with its own row. Do not mark evidence-ready.
 
 Commit:
 

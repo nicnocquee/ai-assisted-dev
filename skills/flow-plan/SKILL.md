@@ -122,10 +122,12 @@ Record confirmed answers in the task Summary / Acceptance criteria so `flow-work
 
 1. Next ID = max existing `T-NNNN` + 1 (start at `T-0001`)
 2. Slug = short kebab-case title
-3. Create `tasks/T-NNNN-slug/task.md` from task-format template
-4. Append row to `TASKS.md` with status `planned`
+3. Create `tasks/T-NNNN-slug/task.md` from `reference/task-format.md`: Status `planned`, first Status log row `When` = now UTC and `State` = `planned` (no note column, no commit column)
+4. Append a `TASKS.md` row: Status `planned`, **Created** = that same timestamp, **Started / Done / Cancelled blank**
 
 Acceptance criteria must be checkable by a non-coder when following evidence later.
+
+Follow `reference/task-format.md` for every later status change (writers: `flow-work`, `flow-evidence`, `flow-ship`).
 
 #### TS/JS projects
 

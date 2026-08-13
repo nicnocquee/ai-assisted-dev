@@ -51,7 +51,7 @@ Summarize:
 4. Link paths: `evidence/T-NNNN/EVIDENCE.md`, docs feature page
 5. Implementation + evidence SHAs
 
-Update status to `in-review` and commit on the task branch if not already:
+Update status to `in-review`, append Status log row `in-review` (timestamp + state only), update `TASKS.md` Status. Commit on the task branch if not already:
 
 ```
 chore(T-NNNN): mark in-review for stakeholder
@@ -61,7 +61,9 @@ chore(T-NNNN): mark in-review for stakeholder
 
 **Only** proceed to merge after clear approval language ("approve", "ship it", "LGTM", "merge").
 
-Change requests → document in status log, set `in_progress` or `ready-for-evidence`, hand back to flow-work / flow-evidence.
+Change requests → append Status log `sent-back`, then set Status to `in_progress` or `ready-for-evidence` (append that row; if `in_progress`, set **Started** to that timestamp). Hand back to flow-work / flow-evidence. No notes on the Status log — put the request in the task Summary or a reply to the stakeholder.
+
+If the stakeholder cancels the task: Status `cancelled`, append `cancelled`, fill **Cancelled**, leave **Done** blank, commit, do not merge.
 
 ### 4. Merge (--no-ff)
 
@@ -84,8 +86,8 @@ Never force-push default branch as part of ship.
 
 Update after merge:
 
-- task.md Status `done`, Merge SHA = `$MERGE_SHA`, status log row
-- TASKS.md row: status done, merge SHA filled, worktree cleared
+- task.md Status `done`, Merge SHA = `$MERGE_SHA`, append Status log `done`
+- TASKS.md: Status `done`, **Done** = that timestamp, **Cancelled** blank, merge SHA filled, worktree cleared
 
 Commit on default branch:
 
