@@ -2,7 +2,7 @@
 
 ## Status
 
-in-review
+done
 
 ## Summary
 
@@ -45,7 +45,7 @@ task/T-0001-task-history-format
 
 ## Worktree
 
-.worktrees/T-0001
+(removed)
 
 ## Evidence
 
@@ -53,7 +53,7 @@ evidence/T-0001/EVIDENCE.md
 
 ## Merge SHA
 
-(after ship)
+947c568a7d3c2472b6b0517d1323199a628f6850
 
 ## Status log
 
@@ -64,3 +64,4 @@ evidence/T-0001/EVIDENCE.md
 | 2026-08-13T02:39:34Z | ready-for-evidence |
 | 2026-08-13T02:40:24Z | evidence-ready     |
 | 2026-08-13T02:42:22Z | in-review          |
+| 2026-08-13T02:45:10Z | done               |
