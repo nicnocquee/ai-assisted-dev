@@ -2,7 +2,7 @@
 
 ## Status
 
-ready-for-evidence
+evidence-ready
 
 ## Summary
 
@@ -47,7 +47,7 @@ task/T-0003-task-history-status
 
 ## Evidence
 
-(evidence/T-0003/EVIDENCE.md once exists)
+evidence/T-0003/EVIDENCE.md
 
 ## Merge SHA
 
@@ -60,3 +60,4 @@ task/T-0003-task-history-status
 | 2026-08-13T02:36:23Z | planned     |
 | 2026-08-13T02:46:56Z | in_progress        |
 | 2026-08-13T02:48:29Z | ready-for-evidence |
+| 2026-08-13T02:49:29Z | evidence-ready     |
