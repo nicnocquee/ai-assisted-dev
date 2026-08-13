@@ -9,7 +9,7 @@ ready-for-review
 | Kind                | SHA                                      | Notes                                              |
 | ------------------- | ---------------------------------------- | -------------------------------------------------- |
 | Implementation HEAD | 850b8a0bd06e6dacc808270ea4af46285838d4de | Branch task/T-0002-task-history-writers at evidence |
-| Evidence pack       | (filled after evidence commit)           | This folder                                        |
+| Evidence pack       | aa0ecdce66fe6b7bbda9f2db0248f6d207e36fd1 | This folder                                        |
 
 ## What changed
 
