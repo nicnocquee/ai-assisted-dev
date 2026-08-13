@@ -2,7 +2,7 @@
 
 ## Status
 
-in-review
+done
 
 ## Summary
 
@@ -50,7 +50,7 @@ task/T-0002-task-history-writers
 
 ## Worktree
 
-.worktrees/T-0002
+(removed)
 
 ## Evidence
 
@@ -58,7 +58,7 @@ evidence/T-0002/EVIDENCE.md
 
 ## Merge SHA
 
-(after ship)
+bbed0aab5192dc5c71d66b03b8b49b9eedb535a3
 
 ## Status log
 
@@ -69,3 +69,4 @@ evidence/T-0002/EVIDENCE.md
 | 2026-08-13T02:48:29Z | ready-for-evidence |
 | 2026-08-13T02:49:29Z | evidence-ready     |
 | 2026-08-13T03:36:19Z | in-review          |
+| 2026-08-13T03:37:48Z | done               |
