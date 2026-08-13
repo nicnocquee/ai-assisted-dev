@@ -2,7 +2,7 @@
 
 ## Status
 
-in_progress
+ready-for-evidence
 
 ## Summary
 
@@ -10,12 +10,12 @@ The written contract for flow tasks records when a task was created, last starte
 
 ## Acceptance criteria
 
-- [ ] Opening `reference/task-format.md` shows a Status log with only `When (UTC)` and state — no note column, no commit column
-- [ ] The format lists extra log-only names `verify-failed` and `sent-back`; the Status field still uses the existing lifecycle statuses
-- [ ] `TASKS.md` column list includes Created, Started, Done, and Cancelled with these meanings: Created = task file written; Started = latest move to `in_progress`; Done and Cancelled are separate and only one is filled; blank means that moment has not happened
-- [ ] Never started → Started blank; cancelled before start → Created + Cancelled only; shipped → Created + Started + Done, Cancelled blank
-- [ ] `flow-init` starter `TASKS.md` uses the same columns
-- [ ] The example task template in `task-format.md` matches this log and these ledger columns
+- [x] Opening `reference/task-format.md` shows a Status log with only `When (UTC)` and state — no note column, no commit column
+- [x] The format lists extra log-only names `verify-failed` and `sent-back`; the Status field still uses the existing lifecycle statuses
+- [x] `TASKS.md` column list includes Created, Started, Done, and Cancelled with these meanings: Created = task file written; Started = latest move to `in_progress`; Done and Cancelled are separate and only one is filled; blank means that moment has not happened
+- [x] Never started → Started blank; cancelled before start → Created + Cancelled only; shipped → Created + Started + Done, Cancelled blank
+- [x] `flow-init` starter `TASKS.md` uses the same columns
+- [x] The example task template in `task-format.md` matches this log and these ledger columns
 
 ## Stakeholder verification scenario
 
@@ -60,4 +60,5 @@ task/T-0001-task-history-format
 | When (UTC)           | State       |
 | -------------------- | ----------- |
 | 2026-08-13T02:36:23Z | planned     |
-| 2026-08-13T02:38:03Z | in_progress |
+| 2026-08-13T02:38:03Z | in_progress        |
+| 2026-08-13T02:39:34Z | ready-for-evidence |
