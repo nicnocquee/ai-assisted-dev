@@ -6,10 +6,10 @@ ready-for-review
 
 ## Linked commits
 
-| Kind                | SHA                                      | Notes                                             |
-| ------------------- | ---------------------------------------- | ------------------------------------------------- |
+| Kind                | SHA                                      | Notes                                              |
+| ------------------- | ---------------------------------------- | -------------------------------------------------- |
 | Implementation HEAD | 5b1224d15fbdbb80f551f995b477962851116ae8 | Branch task/T-0003-task-history-status at evidence |
-| Evidence pack       | c1b3e58f8802ce72071e201a7e90677715af9161 | This folder                                       |
+| Evidence pack       | c1b3e58f8802ce72071e201a7e90677715af9161 | This folder                                        |
 
 ## What changed
 
