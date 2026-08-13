@@ -22,6 +22,8 @@ tasks/
 
 ## Lifecycle statuses
 
+The **Status** field on `task.md` and in `TASKS.md` uses only these values:
+
 | Status               | Meaning                                            |
 | -------------------- | -------------------------------------------------- |
 | `planned`            | Task file created; not started                     |
@@ -33,19 +35,48 @@ tasks/
 | `done`               | Merged; ledger has merge SHA                       |
 | `cancelled`          | Abandoned; keep history                            |
 
-Transitions are logged in the task's Status log with ISO timestamp and commit SHA when available.
+## Status log
+
+Every state change is appended to the task's Status log. Each row is **When (UTC)** (ISO-8601) and **State** only — no note column, no commit column.
+
+Log `State` is either a lifecycle status (same names as the Status field) or one of these **log-only** names (they never appear in the Status field):
+
+| Log-only name    | When to append                                                     |
+| ---------------- | ------------------------------------------------------------------ |
+| `verify-failed`  | Evidence / verify did not pass                                     |
+| `sent-back`      | Stakeholder rejected review and sent the task back                 |
+
+After a log-only name, append a second row for the lifecycle status the task actually moves to (`in_progress`, `blocked`, or `ready-for-evidence`).
 
 ## TASKS.md columns
 
 ```markdown
 # Task ledger
 
-| ID     | Title      | Status  | Branch                 | Worktree | Evidence | Merge SHA | Depends on |
-| ------ | ---------- | ------- | ---------------------- | -------- | -------- | --------- | ---------- |
-| T-0001 | Empty cart | planned | task/T-0001-empty-cart |          |          |           |            |
+| ID     | Title      | Status  | Created              | Started | Done | Cancelled | Branch                 | Worktree | Evidence | Merge SHA | Depends on |
+| ------ | ---------- | ------- | -------------------- | ------- | ---- | --------- | ---------------------- | -------- | -------- | --------- | ---------- |
+| T-0001 | Empty cart | planned | 2026-01-01T00:00:00Z |         |      |           | task/T-0001-empty-cart |          |          |           |            |
 ```
 
-Keep this table sorted by ID ascending. Update it whenever status/branch/evidence/merge changes and **commit the update**.
+Keep this table sorted by ID ascending. Update it whenever status, dates, branch, evidence, or merge changes and **commit the update**.
+
+### Ledger dates
+
+| Column      | Meaning                                                                 | When to fill                                      |
+| ----------- | ----------------------------------------------------------------------- | ------------------------------------------------- |
+| Created     | When the task file was written                                          | Once, at create; never overwrite                  |
+| Started     | Latest time the task moved to `in_progress`                             | Every move to `in_progress` (overwrites previous) |
+| Done        | When the task was shipped (`done`)                                      | On ship; leave blank otherwise                    |
+| Cancelled   | When the task was abandoned (`cancelled`)                               | On cancel; leave blank otherwise                  |
+
+Blank means that moment has not happened. Done and Cancelled are separate; **only one is filled**.
+
+| Situation              | Created | Started | Done | Cancelled |
+| ---------------------- | ------- | ------- | ---- | --------- |
+| Planned, never started | filled  | blank   | blank | blank    |
+| Cancelled before start | filled  | blank   | blank | filled   |
+| Shipped                | filled  | filled  | filled | blank   |
+| Cancelled after start  | filled  | filled  | blank | filled   |
 
 ## task.md template
 
@@ -118,9 +149,9 @@ task/T-0001-empty-cart
 
 ## Status log
 
-| When (UTC)           | Status  | Note         | Commit  |
-| -------------------- | ------- | ------------ | ------- |
-| 2026-01-01T00:00:00Z | planned | Task created | abc1234 |
+| When (UTC)           | State   |
+| -------------------- | ------- |
+| 2026-01-01T00:00:00Z | planned |
 ```
 
 ## Creating a task (flow-plan)
@@ -128,8 +159,8 @@ task/T-0001-empty-cart
 Do not create files until `flow-plan` has finished its drill-down gate (no invented product facts).
 
 1. Assign next ID
-2. Write `tasks/T-NNNN-slug/task.md`
-3. Append row to `TASKS.md`
+2. Write `tasks/T-NNNN-slug/task.md` with Status `planned` and a first Status log row (`When` = now UTC, `State` = `planned`)
+3. Append a `TASKS.md` row: Status `planned`, Created = that same timestamp, Started / Done / Cancelled blank
 4. Commit: `task(T-NNNN): create <slug> task`
 
 ## Parallelism and dependencies
@@ -140,7 +171,7 @@ Do not create files until `flow-plan` has finished its drill-down gate (no inven
 
 ## Updating status
 
-1. Edit Status field in `task.md`
-2. Append Status log row
-3. Update `TASKS.md` row
+1. Edit Status field in `task.md` (lifecycle status only)
+2. Append a Status log row: `When (UTC)` + `State` only. For `verify-failed` or `sent-back`, append that log-only row, then a lifecycle-status row
+3. Update `TASKS.md`: Status, and Created / Started / Done / Cancelled as defined above
 4. Commit with appropriate type (`chore`, `task`, `feat`, etc.)

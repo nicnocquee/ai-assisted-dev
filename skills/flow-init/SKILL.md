@@ -86,8 +86,8 @@ evidence/.gitkeep
 ```markdown
 # Task ledger
 
-| ID | Title | Status | Branch | Worktree | Evidence | Merge SHA | Depends on |
-|----|-------|--------|--------|----------|----------|-----------|------------|
+| ID | Title | Status | Created | Started | Done | Cancelled | Branch | Worktree | Evidence | Merge SHA | Depends on |
+|----|-------|--------|---------|---------|------|-----------|--------|----------|----------|-----------|------------|
 ```
 
 ### 5. .gitignore
