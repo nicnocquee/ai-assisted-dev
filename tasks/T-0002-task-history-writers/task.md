@@ -2,7 +2,7 @@
 
 ## Status
 
-evidence-ready
+in-review
 
 ## Summary
 
@@ -62,9 +62,10 @@ evidence/T-0002/EVIDENCE.md
 
 ## Status log
 
-| When (UTC)           | State       |
-| -------------------- | ----------- |
-| 2026-08-13T02:36:23Z | planned     |
+| When (UTC)           | State              |
+| -------------------- | ------------------ |
+| 2026-08-13T02:36:23Z | planned            |
 | 2026-08-13T02:46:56Z | in_progress        |
 | 2026-08-13T02:48:29Z | ready-for-evidence |
 | 2026-08-13T02:49:29Z | evidence-ready     |
+| 2026-08-13T03:36:19Z | in-review          |
