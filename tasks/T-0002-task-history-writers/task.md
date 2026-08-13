@@ -2,7 +2,7 @@
 
 ## Status
 
-in_progress
+ready-for-evidence
 
 ## Summary
 
@@ -10,14 +10,14 @@ Every skill and agent that creates or changes a task writes the timestamped Stat
 
 ## Acceptance criteria
 
-- [ ] Creating a task writes Created (UTC) and a first Status log row `planned`; Started, Done, and Cancelled stay blank
-- [ ] Moving to `in_progress` appends that row and sets Started to that timestamp (overwrites a previous Started)
-- [ ] Every other lifecycle change appends a Status log row with that status name
-- [ ] Failed verify appends `verify-failed`, then the Status field moves to a lifecycle status (`in_progress` or `blocked`) with its own row
-- [ ] Stakeholder send-back appends `sent-back`, then the Status field moves to `in_progress` or `ready-for-evidence` with its own row
-- [ ] Shipping fills Done and appends `done`; cancelling fills Cancelled and appends `cancelled`; the other of those two columns stays blank
-- [ ] No skill or agent writes a note column or a commit column on the Status log
-- [ ] `flow-plan`, `flow-work`, `flow-evidence`, `flow-ship`, `flow-builder`, `flow-verifier`, and `reference/evidence-format.md` all match these rules
+- [x] Creating a task writes Created (UTC) and a first Status log row `planned`; Started, Done, and Cancelled stay blank
+- [x] Moving to `in_progress` appends that row and sets Started to that timestamp (overwrites a previous Started)
+- [x] Every other lifecycle change appends a Status log row with that status name
+- [x] Failed verify appends `verify-failed`, then the Status field moves to a lifecycle status (`in_progress` or `blocked`) with its own row
+- [x] Stakeholder send-back appends `sent-back`, then the Status field moves to `in_progress` or `ready-for-evidence` with its own row
+- [x] Shipping fills Done and appends `done`; cancelling fills Cancelled and appends `cancelled`; the other of those two columns stays blank
+- [x] No skill or agent writes a note column or a commit column on the Status log
+- [x] `flow-plan`, `flow-work`, `flow-evidence`, `flow-ship`, `flow-builder`, `flow-verifier`, and `reference/evidence-format.md` all match these rules
 
 ## Stakeholder verification scenario
 
@@ -65,4 +65,5 @@ task/T-0002-task-history-writers
 | When (UTC)           | State       |
 | -------------------- | ----------- |
 | 2026-08-13T02:36:23Z | planned     |
-| 2026-08-13T02:46:56Z | in_progress |
+| 2026-08-13T02:46:56Z | in_progress        |
+| 2026-08-13T02:48:29Z | ready-for-evidence |
