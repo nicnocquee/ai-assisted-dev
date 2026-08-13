@@ -2,7 +2,7 @@
 
 ## Status
 
-planned
+in_progress
 
 ## Summary
 
@@ -55,6 +55,7 @@ task/T-0003-task-history-status
 
 ## Status log
 
-| When (UTC)           | State   |
-| -------------------- | ------- |
-| 2026-08-13T02:36:23Z | planned |
+| When (UTC)           | State       |
+| -------------------- | ----------- |
+| 2026-08-13T02:36:23Z | planned     |
+| 2026-08-13T02:46:56Z | in_progress |
